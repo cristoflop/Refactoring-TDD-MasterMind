@@ -11,18 +11,20 @@ import java.util.List;
 
 public class ProposalController extends Controller implements InteractorController {
 
+    private ProposalView proposalView;
+
     public ProposalController(Game game, State state) {
         super(game, state);
+        this.proposalView = new ProposalView();
     }
 
     public void control() {
-        ProposalView proposalView = new ProposalView();
-        this.readProposal(proposalView);
-        proposalView.writeAttempts(this.getAttempts());
-        proposalView.writeSecret(this.getWidth());
-        this.writeProposedCombinations(proposalView);
-        this.writeIfWinner(proposalView);
-        proposalView.newLine();
+        this.readProposal(this.proposalView);
+        this.proposalView.writeAttempts(this.getAttempts());
+        this.proposalView.writeSecret(this.getWidth());
+        this.writeProposedCombinations(this.proposalView);
+        this.writeIfWinner(this.proposalView);
+        this.proposalView.newLine();
     }
 
     public Error addProposedCombination(List<Color> colors) {
