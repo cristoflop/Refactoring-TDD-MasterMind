@@ -1,6 +1,6 @@
 package usantatecla.mastermind;
 
-import usantatecla.mastermind.controllers.Controller;
+import usantatecla.mastermind.controllers.InteractorController;
 import usantatecla.mastermind.controllers.Logic;
 
 public class Mastermind {
@@ -12,7 +12,7 @@ public class Mastermind {
     }
 
     protected void play() {
-        Controller controller;
+        InteractorController controller;
         do {
             controller = this.logic.getController();
             if (controller != null) {

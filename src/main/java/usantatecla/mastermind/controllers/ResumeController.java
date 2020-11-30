@@ -4,7 +4,7 @@ import usantatecla.mastermind.models.Game;
 import usantatecla.mastermind.models.State;
 import usantatecla.mastermind.views.console.ResumeView;
 
-public class ResumeController extends Controller {
+public class ResumeController extends Controller implements InteractorController {
 
     public ResumeController(Game game, State state) {
         super(game, state);

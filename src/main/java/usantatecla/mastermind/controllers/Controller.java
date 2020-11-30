@@ -26,6 +26,4 @@ public abstract class Controller {
         this.game.clear();
     }
 
-    public abstract void control();
-
 }

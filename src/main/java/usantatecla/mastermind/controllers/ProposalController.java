@@ -9,7 +9,7 @@ import usantatecla.mastermind.views.console.ProposalView;
 
 import java.util.List;
 
-public class ProposalController extends Controller {
+public class ProposalController extends Controller implements InteractorController {
 
     public ProposalController(Game game, State state) {
         super(game, state);
