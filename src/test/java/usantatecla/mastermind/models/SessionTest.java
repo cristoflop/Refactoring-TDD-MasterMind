@@ -1,8 +1,8 @@
 package usantatecla.mastermind.models;
 
-import usantatecla.mastermind.types.Error;
 import org.junit.Before;
 import org.junit.Test;
+import usantatecla.mastermind.types.Error;
 
 import static org.junit.Assert.*;
 
@@ -24,14 +24,16 @@ public class SessionTest {
 
     @Test
     public void testGivenSessionWhenAddProposalCorrectThenOk() {
-        this.session.addProposedCombination(colorBuilder.build("rgbo"));
-        this.setExpectedSession(this.sessionBuilder.addProposal("rgbo").build(StateValue.IN_GAME, this.seed));
+        this.addProposal("rgbo");
+        this.setExpectedSession(this.sessionBuilder
+                .addProposal("rgbo")
+                .build(StateValue.IN_GAME, this.seed));
         assertEquals(this.session, this.expectedSession);
     }
 
     @Test
-    public void testGivenSessionWhenAddProposalBadFormatThenError() {
-        Error error = this.session.addProposedCombination(colorBuilder.build("rgboia"));
+    public void testGivenSessionWhenAddProposalWrongLengthThenError() {
+        Error error = this.addProposal("rgboy");
         assertNotNull(error);
         assertEquals(error, Error.WRONG_LENGTH);
     }
@@ -47,13 +49,14 @@ public class SessionTest {
 
     @Test
     public void testGivenSessionWhenRedoThenRedoProposal() {
-        this.session.addProposedCombination(colorBuilder.build("rgbo"));
+        this.addProposal("rgbo");
         this.setExpectedSession(this.sessionBuilder
-                .addProposal("orgb")
+                .addProposal("rgbo")
+                .addProposal("rgpo")
                 .build(StateValue.IN_GAME, this.seed));
         this.expectedSession.undo();
         this.expectedSession.redo();
-        assertEquals(this.session, this.expectedSession);
+        assertNotEquals(this.session, this.expectedSession);
     }
 
     @Test
@@ -62,12 +65,12 @@ public class SessionTest {
         assertEquals(this.session.getValueState(), StateValue.FINAL);
     }
 
-    private void setSession(Session session) {
-        this.session = session;
-    }
-
     private void setExpectedSession(Session session) {
         this.expectedSession = session;
+    }
+
+    private Error addProposal(String proposal) {
+        return this.session.addProposedCombination(colorBuilder.build(proposal));
     }
 
 }

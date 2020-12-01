@@ -55,14 +55,14 @@ public class Session {
             }
         }
         if (error == null) {
-            System.out.println("ESTA BIEN");
+            // System.out.println("ESTA BIEN");
             this.game.addProposedCombination(colors);
             this.registry.register();
             if (this.game.isWinner() || this.game.isLooser()) {
                 this.state.next();
             }
         } else {
-            System.out.println("ESTA MAL");
+            // System.out.println("ESTA MAL");
         }
         return error;
     }
@@ -125,7 +125,6 @@ public class Session {
             return false;
         Session other = (Session) obj;
         return this.game.equals(other.game) &&
-                this.state.equals(other.state) &&
-                this.registry.equals(other.registry);
+                this.state.equals(other.state);
     }
 }
