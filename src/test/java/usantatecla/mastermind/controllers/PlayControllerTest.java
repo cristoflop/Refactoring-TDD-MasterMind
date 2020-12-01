@@ -11,7 +11,10 @@ import usantatecla.mastermind.models.SessionBuilder;
 import usantatecla.mastermind.models.StateValue;
 import usantatecla.mastermind.views.console.ProposalView;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PlayControllerTest {
 
@@ -31,16 +34,58 @@ public class PlayControllerTest {
         this.colorBuilder = new ColorBuilder();
         this.session = new SessionBuilder()
                 .addProposal("rgbo")
-                .addProposal("rbyo")
-                .addProposal("rbop")
                 .build(StateValue.IN_GAME, this.seed);
         this.playController = new PlayController(session);
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testGivenPlayControllerWhenAddProposalCorrectThenReturnOk() {
-        assertTrue(true);
+    public void testGivenPlayControllerWhenTryToUndoWithOneProposalThenReturnNotUndoableAgain() {
+        this.playController.undo();
+        assertFalse(this.playController.isUndoable);
+    }
+
+    @Test(expected = Exception.class)
+    public void testGivenPlayControllerWhenTryToRedoWithoutProposalThenReturnError() {
+        this.playController.redo();
+    }
+
+    @Test
+    public void testGivenPlayControllerWhenControlWithInvalidOptionThenError() {
+        int expectedAttempts = this.playController.getAttempts() + 1;
+        when(this.consoleMenu.read())
+                .thenReturn(null)
+                .thenReturn(new PlayCommand());
+        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
+        this.playController.control();
+        assertEquals(this.playController.getAttempts(), expectedAttempts);
+        verify(this.proposalView).writeError(any());
+    }
+
+    @Test
+    public void testGivenPlayControllerWhenControlWithPlayOptionThenAddNewProposal() {
+        int expectedAttempts = this.playController.getAttempts() + 1;
+        when(this.consoleMenu.read()).thenReturn(new PlayCommand());
+        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
+        this.playController.control();
+        assertEquals(this.playController.getAttempts(), expectedAttempts);
+    }
+
+    @Test
+    public void testGivenPlayControllerWhenControlWithPlayOptionThenAddNewProposal() {
+        int expectedAttempts = this.playController.getAttempts() + 1;
+        when(this.consoleMenu.read()).thenReturn(new PlayCommand());
+        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
+        this.playController.control();
+        assertEquals(this.playController.getAttempts(), expectedAttempts);
+    }
+
+    @Test
+    public void testGivenPlayControllerWhenControlWithUndoOptionThenUndoMovement() {
+        int expectedAttempts = this.playController.getAttempts() - 1;
+        when(this.consoleMenu.read()).thenReturn(new UndoCommand());
+        this.playController.control();
+        assertEquals(this.playController.getAttempts(), expectedAttempts);
     }
 
 }

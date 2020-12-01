@@ -13,6 +13,7 @@ import usantatecla.mastermind.models.StateValue;
 import usantatecla.mastermind.views.console.ProposalView;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,6 +22,7 @@ public class ProposalControllerTest {
 
     private ColorBuilder colorBuilder;
 
+    private final String winnerCombination = "rbgp";
     private final int seed = 30;
     private Session session;
     @Mock
@@ -34,6 +36,13 @@ public class ProposalControllerTest {
         this.session = new SessionBuilder()
                 .addProposal("rgbo")
                 .addProposal("rgyb")
+                .addProposal("ogyb")
+                .addProposal("rpog")
+                .addProposal("brog")
+                .addProposal("ygpo")
+                .addProposal("ypob")
+                .addProposal("opbr")
+                .addProposal("orbp")
                 .build(StateValue.IN_GAME, this.seed);
         this.proposalController = new ProposalController(this.session);
         MockitoAnnotations.initMocks(this);
@@ -50,11 +59,20 @@ public class ProposalControllerTest {
     }
 
     @Test
-    public void testGivenProposalControllerWhenContolThenCheckIfWin() {
+    public void testGivenProposalControllerWhenControlThenCheckIfWin() {
         when(this.proposalView.readProposal())
                 .thenReturn(this.colorBuilder.build("gbop"));
         this.proposalController.control();
         assertFalse(this.proposalController.isWinner());
+    }
+
+    @Test
+    public void testGivenProposalControllerWhenWinTheGameThenGameEnds() {
+        System.out.println(this.session.getSecretCombination());
+        when(this.proposalView.readProposal())
+                .thenReturn(this.colorBuilder.build(this.winnerCombination));
+        this.proposalController.control();
+        assertTrue(this.proposalController.isWinner());
     }
 
 }
