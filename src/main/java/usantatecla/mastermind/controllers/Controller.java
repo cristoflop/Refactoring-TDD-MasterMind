@@ -1,29 +1,25 @@
 package usantatecla.mastermind.controllers;
 
-import usantatecla.mastermind.models.Game;
-import usantatecla.mastermind.models.State;
+import usantatecla.mastermind.models.Session;
 
 public abstract class Controller {
 
-    protected Game game;
+    protected Session session;
 
-    protected State state;
-
-    Controller(Game game, State state) {
-        this.game = game;
-        this.state = state;
+    Controller(Session session) {
+        this.session = session;
     }
 
     public int getWidth() {
-        return this.game.getWidth();
+        return this.session.getWidth();
     }
 
     public void next() {
-        this.state.next();
+        this.session.next();
     }
 
     public void clear() {
-        this.game.clear();
+        this.session.reset();
     }
 
 }
