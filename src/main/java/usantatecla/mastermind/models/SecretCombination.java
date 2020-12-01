@@ -18,6 +18,16 @@ class SecretCombination extends Combination {
         Collections.shuffle(this.colors);
     }
 
+    SecretCombination(int seed){
+        for (Color color : Color.values()) {
+            this.colors.add(color);
+        }
+        Random random = new Random(seed);
+        for (int i = 0; i < Color.length() - Combination.getWidth(); i++) {
+            this.colors.remove(random.nextInt(this.colors.size()));
+        }
+    }
+
     Result getResult(ProposedCombination proposedCombination) {
         int blacks = 0;
         for (int i = 0; i < this.colors.size(); i++) {

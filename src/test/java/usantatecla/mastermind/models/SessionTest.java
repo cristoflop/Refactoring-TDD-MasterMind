@@ -25,7 +25,7 @@ public class SessionTest {
     @Test
     public void testGivenSessionWhenAddProposalCorrectThenOk() {
         this.session.addProposedCombination(colorBuilder.build("rgbo"));
-        this.setExpectedSession(this.sessionBuilder.build(StateValue.IN_GAME, this.seed).addProposal("rgbo"));
+        this.setExpectedSession(this.sessionBuilder.addProposal("rgbo").build(StateValue.IN_GAME, this.seed));
         assertEquals(this.session, this.expectedSession);
     }
 
@@ -38,8 +38,9 @@ public class SessionTest {
 
     @Test
     public void testGivenSessionWhenUndoThenUndoProposal() {
-        this.setExpectedSession(this.sessionBuilder.build(StateValue.IN_GAME, this.seed)
-                .addProposal("rgbo"));
+        this.setExpectedSession(this.sessionBuilder
+                .addProposal("rgbo")
+                .build(StateValue.IN_GAME, this.seed));
         this.expectedSession.undo();
         assertEquals(this.session, this.expectedSession);
     }
@@ -47,8 +48,9 @@ public class SessionTest {
     @Test
     public void testGivenSessionWhenRedoThenRedoProposal() {
         this.session.addProposedCombination(colorBuilder.build("rgbo"));
-        this.setExpectedSession(this.sessionBuilder.build(StateValue.IN_GAME, this.seed)
-                .addProposal("orgb"));
+        this.setExpectedSession(this.sessionBuilder
+                .addProposal("orgb")
+                .build(StateValue.IN_GAME, this.seed));
         this.expectedSession.undo();
         this.expectedSession.redo();
         assertEquals(this.session, this.expectedSession);

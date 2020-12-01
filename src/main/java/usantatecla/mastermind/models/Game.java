@@ -21,11 +21,18 @@ public class Game {
         this.clear();
     }
 
+    public Game(int seed) {
+        this.clear(seed);
+    }
+
     public void clear() {
-        this.secretCombination = new SecretCombination();
-        this.proposedCombinations = new ArrayList<ProposedCombination>();
-        this.results = new ArrayList<Result>();
-        this.attempts = 0;
+        this.initSecretCombination(-1);
+        this.init();
+    }
+
+    public void clear(int seed) {
+        this.initSecretCombination(seed);
+        this.init();
     }
 
     public void addProposedCombination(List<Color> colors) {
@@ -76,6 +83,20 @@ public class Game {
         this.proposedCombinations = new ArrayList<ProposedCombination>(gameMemento.getProposedCombinations());
         this.results = new ArrayList<Result>(gameMemento.getResults());
         this.attempts = gameMemento.getAttempts();
+    }
+
+    private void initSecretCombination(int seed) {
+        if (seed == -1) {
+            this.secretCombination = new SecretCombination();
+        } else {
+            this.secretCombination = new SecretCombination(seed);
+        }
+    }
+
+    private void init() {
+        this.proposedCombinations = new ArrayList<ProposedCombination>();
+        this.results = new ArrayList<Result>();
+        this.attempts = 0;
     }
 
 }

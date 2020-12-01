@@ -17,6 +17,12 @@ public class Session {
         this.registry = new GameRegistry(game);
     }
 
+    public Session(int seed) {
+        this.state = new State();
+        this.game = new Game(seed);
+        this.registry = new GameRegistry(game);
+    }
+
     public StateValue getValueState() {
         return this.state.getValueState();
     }
@@ -26,7 +32,7 @@ public class Session {
     }
 
     public void reset() {
-        this.game.clear();
+        this.game.clear(-1);
         this.state.reset();
         this.registry = new GameRegistry(game);
     }
@@ -109,4 +115,17 @@ public class Session {
         return this.registry.isRedoable();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Session other = (Session) obj;
+        return this.game.equals(other.game) &&
+                this.state.equals(other.state) &&
+                this.registry.equals(other.registry);
+    }
 }
