@@ -5,7 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ProposalControllerTest.class
+        ProposalControllerTest.class,
+        RedoControllerTest.class,
+        UndoControllerTest.class,
+        PlayController.class
 })
 public final class AllControllerTest {
 }
