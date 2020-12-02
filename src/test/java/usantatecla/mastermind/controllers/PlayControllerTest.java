@@ -9,12 +9,11 @@ import usantatecla.mastermind.models.ColorBuilder;
 import usantatecla.mastermind.models.Session;
 import usantatecla.mastermind.models.SessionBuilder;
 import usantatecla.mastermind.models.StateValue;
-import usantatecla.mastermind.views.console.ProposalView;
+import usantatecla.mastermind.views.console.ConsolePlayMenu;
+import usantatecla.mastermind.views.console.GameView;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class PlayControllerTest {
 
@@ -23,9 +22,15 @@ public class PlayControllerTest {
     private Session session;
 
     @Mock
-    private ConsoleMenu consoleMenu;
+    private ConsolePlayMenu consoleMenu;
     @Mock
-    private ProposalView proposalView;
+    private GameView gameView;
+    @Mock
+    private ProposalController proposalController;
+    @Mock
+    private RedoController redoController;
+    @Mock
+    private UndoController undoController;
     @InjectMocks
     private PlayController playController;
 
@@ -42,50 +47,39 @@ public class PlayControllerTest {
     @Test
     public void testGivenPlayControllerWhenTryToUndoWithOneProposalThenReturnNotUndoableAgain() {
         this.playController.undo();
-        assertFalse(this.playController.isUndoable);
+        assertFalse(this.playController.undoable());
     }
 
     @Test(expected = Exception.class)
     public void testGivenPlayControllerWhenTryToRedoWithoutProposalThenReturnError() {
-        this.playController.redo();
+        this.session.redo();
     }
 
-    @Test
-    public void testGivenPlayControllerWhenControlWithInvalidOptionThenError() {
-        int expectedAttempts = this.playController.getAttempts() + 1;
-        when(this.consoleMenu.read())
-                .thenReturn(null)
-                .thenReturn(new PlayCommand());
-        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
-        this.playController.control();
-        assertEquals(this.playController.getAttempts(), expectedAttempts);
-        verify(this.proposalView).writeError(any());
+    @Test(expected = Exception.class)
+    public void testGivenPlayControllerWhenTryToUndoWithoutPossibilitiesThenThrowException() {
+        this.session.undo();
+        this.session.undo();
     }
 
     @Test
     public void testGivenPlayControllerWhenControlWithPlayOptionThenAddNewProposal() {
-        int expectedAttempts = this.playController.getAttempts() + 1;
-        when(this.consoleMenu.read()).thenReturn(new PlayCommand());
-        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
-        this.playController.control();
-        assertEquals(this.playController.getAttempts(), expectedAttempts);
-    }
-
-    @Test
-    public void testGivenPlayControllerWhenControlWithPlayOptionThenAddNewProposal() {
-        int expectedAttempts = this.playController.getAttempts() + 1;
-        when(this.consoleMenu.read()).thenReturn(new PlayCommand());
-        when(this.proposalView.readProposal()).thenReturn(this.colorBuilder.build("rgby"));
-        this.playController.control();
-        assertEquals(this.playController.getAttempts(), expectedAttempts);
+        this.playController.addProposedCombination();
+        verify(this.proposalController).readProposal();
+        verify(this.gameView).writeAttempts(this.playController.getAttempts());
     }
 
     @Test
     public void testGivenPlayControllerWhenControlWithUndoOptionThenUndoMovement() {
-        int expectedAttempts = this.playController.getAttempts() - 1;
-        when(this.consoleMenu.read()).thenReturn(new UndoCommand());
-        this.playController.control();
-        assertEquals(this.playController.getAttempts(), expectedAttempts);
+        this.playController.undo();
+        verify(this.undoController).undo();
+        verify(this.gameView).writeAttempts(this.playController.getAttempts());
+    }
+
+    @Test
+    public void testGivenPlayControllerWhenControlWithRedoOptionThenRedoMovement() {
+        this.playController.redo();
+        verify(this.redoController).redo();
+        verify(this.gameView).writeAttempts(this.playController.getAttempts());
     }
 
 }

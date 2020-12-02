@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
         ProposalControllerTest.class,
         RedoControllerTest.class,
         UndoControllerTest.class,
-        PlayController.class
+        PlayControllerTest.class
 })
 public final class AllControllerTest {
 }

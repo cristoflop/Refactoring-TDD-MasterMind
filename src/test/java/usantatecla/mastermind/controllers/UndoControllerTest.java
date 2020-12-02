@@ -23,7 +23,7 @@ public class UndoControllerTest {
     @Test
     public void testGivenRedoControllerWhenRedoThenGameChange() {
         Session expectedSession = new SessionBuilder().build(StateValue.IN_GAME, this.seed);
-        this.redoController.undo();
+        this.undoController.undo();
         assertEquals(this.session, expectedSession);
     }
 
