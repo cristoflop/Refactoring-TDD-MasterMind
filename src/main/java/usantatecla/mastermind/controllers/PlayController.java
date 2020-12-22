@@ -26,7 +26,7 @@ public class PlayController extends Controller implements InteractorController {
     }
 
     public void addProposedCombination() {
-        this.proposalController.readProposal();
+        this.proposalController.control();
         this.writeState();
     }
 

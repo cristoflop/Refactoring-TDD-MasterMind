@@ -53,7 +53,7 @@ public class ProposalControllerTest {
         when(this.proposalView.readProposal())
                 .thenReturn(this.colorBuilder.build("gbopr"))
                 .thenReturn(this.colorBuilder.build("gbop"));
-        this.proposalController.readProposal();
+        this.proposalController.control();
         verify(this.proposalView).writeError(any());
         // verify(this.proposalView).writeAttempts(this.proposalController.getAttempts()); // AHORA ESTO PASA AL GAMEVIEW
     }
@@ -62,7 +62,7 @@ public class ProposalControllerTest {
     public void testGivenProposalControllerWhenControlThenCheckIfWin() {
         when(this.proposalView.readProposal())
                 .thenReturn(this.colorBuilder.build("gbop"));
-        this.proposalController.readProposal();
+        this.proposalController.control();
         assertFalse(this.proposalController.isWinner());
     }
 
@@ -71,7 +71,7 @@ public class ProposalControllerTest {
         System.out.println(this.session.getSecretCombination());
         when(this.proposalView.readProposal())
                 .thenReturn(this.colorBuilder.build(this.winnerCombination));
-        this.proposalController.readProposal();
+        this.proposalController.control();
         assertTrue(this.proposalController.isWinner());
     }
 

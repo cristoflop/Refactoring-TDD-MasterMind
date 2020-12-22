@@ -64,7 +64,7 @@ public class PlayControllerTest {
     @Test
     public void testGivenPlayControllerWhenControlWithPlayOptionThenAddNewProposal() {
         this.playController.addProposedCombination();
-        verify(this.proposalController).readProposal();
+        verify(this.proposalController).control();
         verify(this.gameView).writeAttempts(this.playController.getAttempts());
     }
 

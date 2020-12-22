@@ -44,7 +44,7 @@ public class ProposalController extends Controller {
         return this.session.getWhites(position);
     }
 
-    public void readProposal() {
+    public void control() {
         Error error;
         do {
             List<Color> colors = this.proposalView.readProposal();
